@@ -4,6 +4,7 @@ import express from 'express'
 import createHomePageTemplate from './views/index.js'
 import createListTemplate from './views/list.js';
 import createBookTemplate from './views/book.js';
+import createEditFormTemplate from './views/edit.js';
 
 
 import BOOKS_DATA from './data/data.js';
@@ -45,6 +46,22 @@ app.delete('/books/:id',(req,res)=>{
     BOOKS_DATA.splice(idx,1)
 
     res.send();
+})
+app.get('/books/edit/:id',(req,res)=>{
+    const book = BOOKS_DATA.find((b)=>b.id === req.params.id)
+
+    res.send(createEditFormTemplate(book))
+})
+app.put('/books/:id',(req,res)=>{
+    const {title,author} = req.body
+    const {id} =  req.params
+
+    const newBook = {title,author,id}
+
+    const idx = BOOKS_DATA.findIndex((b)=> b.id === id) 
+    BOOKS_DATA[idx] = newBook;
+
+    res.send(createBookTemplate(newBook))
 })
 
 app.listen(3000,()=>{
