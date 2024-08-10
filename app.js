@@ -21,7 +21,7 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/books',(req,res)=>{
-    res.send(createListTemplate())
+    res.send(createListTemplate(BOOKS_DATA))
 })
 
 app.post('/books',(req,res)=>{
@@ -62,6 +62,13 @@ app.put('/books/:id',(req,res)=>{
     BOOKS_DATA[idx] = newBook;
 
     res.send(createBookTemplate(newBook))
+})
+app.post('/books/search',(req,res)=>{
+    const text = req.body.search.toLowerCase()
+
+    const books = BOOKS_DATA.filter((b)=> b.title.toLowerCase().includes(text))
+
+    res.send(createListTemplate(books))
 })
 
 app.listen(3000,()=>{
